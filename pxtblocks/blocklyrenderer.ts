@@ -14,6 +14,7 @@ namespace pxt.blocks {
     }
 
     export interface BlocksRenderOptions {
+        ghost?: string;
         emPixels?: number;
         layout?: BlockLayout;
         clean?: boolean;

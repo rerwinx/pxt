@@ -997,15 +997,19 @@ ${linkString}
         const packageid = options && options.packageId ? "pub:" + options.packageId :
             options && options.package ? "docs:" + options.package
                 : null;
-        return loadPackageAsync(packageid, code)
+        return loadPackageAsync(packageid, code, options?.dependencies)
             .then(() => getCompileOptionsAsync(appTarget.compile ? appTarget.compile.hasHex : false))
             .then(opts => {
                 // compile
                 if (code)
                     opts.fileSystem["main.ts"] = code;
+                if (options?.ghost) {
+                    opts.fileSystem["ghost.ts"] = options?.ghost;
+                    opts.sourceFiles.push("ghost.ts");
+                }
                 opts.ast = true
 
-                if (options.jres) {
+                if (options?.jres) {
                     const tilemapTS = pxt.emitTilemapsFromJRes(JSON.parse(options.jres));
                     if (tilemapTS) {
                         opts.fileSystem[pxt.TILEMAP_JRES] = options.jres;
@@ -1017,7 +1021,7 @@ ${linkString}
 
                 let compileJS: pxtc.CompileResult = undefined;
                 let program: ts.Program;
-                if (options && options.forceCompilation) {
+                if (options?.forceCompilation) {
                     compileJS = pxtc.compile(opts);
                     program = compileJS && compileJS.ast;
                 } else {
