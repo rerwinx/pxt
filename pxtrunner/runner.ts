@@ -1095,7 +1095,7 @@ ${linkString}
         const packageid = options && options.packageId ? "pub:" + options.packageId :
             options && options.package ? "docs:" + options.package
                 : null;
-        return loadPackageAsync(packageid, "")
+        return loadPackageAsync(packageid, "", options?.dependencies)
             .then(() => getCompileOptionsAsync(appTarget.compile ? appTarget.compile.hasHex : false))
             .then(opts => {
                 opts.ast = true

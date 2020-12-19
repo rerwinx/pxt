@@ -217,6 +217,7 @@ namespace pxsim {
             packageId?: string;
             package?: string;
             snippetMode?: boolean;
+            dependencies?: string[];
         }
     }
 

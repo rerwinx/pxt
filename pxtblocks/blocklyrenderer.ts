@@ -26,6 +26,7 @@ namespace pxt.blocks {
         forceCompilation?: boolean;
         generateSourceMap?: boolean;
         jres?: string;
+        dependencies?: string[];
     }
 
     export function initRenderingWorkspace() {
