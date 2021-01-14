@@ -182,6 +182,14 @@ export class ProjectView
         this.hintManager.addHint(ProjectView.tutorialCardId, this.tutorialCardHintCallback.bind(this));
     }
 
+    addSuggestedExtension(extensionUrl: string) {
+        // add suggested extension if not present yet
+        const current = (this.state.suggestedExtensions || []);
+        if (current.indexOf(extensionUrl) < 0) {
+            this.setState({ suggestedExtensions: [extensionUrl, ...current] })
+        }
+    }
+
     private autoRunOnStart(): boolean {
         return pxt.appTarget.simulator
             && ((pxt.options.light
@@ -1307,7 +1315,7 @@ export class ProjectView
         let doSync = false
         // check our multi-tab session
         if (workspace.isHeadersSessionOutdated()) {
-             // reload header before loading
+            // reload header before loading
             pxt.log(`multi-tab sync before load`)
             doSync = true;
         }
@@ -4085,8 +4093,9 @@ function initPacketIO() {
             }, "*")
         },
         (type, payload) => {
-            const messageSimulators = pxt.appTarget.simulator?.messageSimulators;
-            if (messageSimulators?.[type]) {
+            const messageSimulator = pxt.appTarget.simulator?.messageSimulators?.[type];
+            if (messageSimulator) {
+                // send message to simulator
                 window.postMessage({
                     type: "messagepacket",
                     broadcast: false,
@@ -4094,6 +4103,11 @@ function initPacketIO() {
                     data: payload,
                     sender: "packetio",
                 }, "*")
+                // notify user that there is an interresting extenions
+                const editor = getEditor();
+                if (editor && messageSimulator.extensionUrl) {
+                    editor.addSuggestedExtension(messageSimulator.extensionUrl);
+                }
             }
         });
 

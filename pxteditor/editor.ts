@@ -350,6 +350,8 @@ namespace pxt.editor {
 
         openNewTab(header: pxt.workspace.Header, dependent: boolean): void;
         createGitHubRepositoryAsync(): Promise<void>;
+
+        addSuggestedExtension(extensionUrl: string): void;
     }
 
     export interface IHexFileImporter {
