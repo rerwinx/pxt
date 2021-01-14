@@ -185,7 +185,8 @@ export class ProjectView
     addSuggestedExtension(extensionUrl: string) {
         // add suggested extension if not present yet
         const current = (this.state.suggestedExtensions || []);
-        if (current.indexOf(extensionUrl) < 0) {
+        if (extensionUrl && current.indexOf(extensionUrl) < 0) {
+            pxt.debug(`suggested extension ${extensionUrl}`)
             this.setState({ suggestedExtensions: [extensionUrl, ...current] })
         }
     }
